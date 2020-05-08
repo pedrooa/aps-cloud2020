@@ -33,11 +33,11 @@ class TaskListAPI(Resource):
     def post(self):
         args = self.reqparse.parse_args()
         args = args['pyproject']
-        pyproject = open("pyproject.py", "w")
+        pyproject = open("../docker/pyproject.py", "w")
         pyproject.write(args)
         pyproject.close()
         subprocess.call(['./dockerscript'])
-        file = "result.txt"
+        file = "../docker/result.txt"
         with open(file, 'r') as result:
             result = result.read()
         # print(args['pyproject'])

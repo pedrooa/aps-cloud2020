@@ -1,3 +1,4 @@
+cd ../docker
 docker rm -f $(docker ps -aq) 
 rm result.txt
 docker build -t pythonproject .
