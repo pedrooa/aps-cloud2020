@@ -1,13 +1,8 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse, fields,marshal
 import os
-import pymongo
 
 
-IPmongodb = str(os.environ['IPmongodb'])
-client = pymongo.MongoClient("mongodb://"+IPmongodb+":27017")
-db = client['Cloud']
-taskCollection = db['tasks']
 
 task_fields = {
     'id': fields.Integer,
@@ -24,8 +19,8 @@ class TaskListAPI(Resource):
     def __init__(self):
 
         self.reqparse = reqparse.RequestParser()
-        # self.reqparse.add_argument('title', type = str, required = True,
-        #     help = 'No task title provided', location = 'json')
+        self.reqparse.add_argument('pyproject', type = str, required = True,
+            help = 'No python project provided', location = 'json')
         # self.reqparse.add_argument('description', type = str, default = "", location = 'json')
         super(TaskListAPI, self).__init__()
 
@@ -36,15 +31,16 @@ class TaskListAPI(Resource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        task = Tarefas(len(tasks)+1,args['title'],args['description'])
-        task = {
-            'id': tasks[-1]['id'] + 1 if len(tasks) > 0 else 1,
-            'title': args['title'],
-            'description': args['description'],
-            'done': False
-        }
-        taskCollection.insert_one(task)
-        return {'task': marshal(task, task_fields)}, 201
+        task = args['pyproject']
+        # task = {
+        #     'id': tasks[-1]['id'] + 1 if len(tasks) > 0 else 1,
+        #     'title': args['title'],
+        #     'description': args['description'],
+        #     'done': False
+        # }
+        # taskCollection.insert_one(task)
+        # return {'task': marshal(task, task_fields)}, 201
+        return {'task': task}, 201
 
 class TaskAPI(Resource):
     def __init__(self):
@@ -96,7 +92,7 @@ class HealthcheckAPI(Resource):
 
 
 api.add_resource(TaskListAPI, '/tarefas', endpoint = 'tarefas')
-api.add_resource(TaskAPI, '/tarefa/<int:id>', endpoint = 'tarefa')
+# api.add_resource(TaskAPI, '/tarefa/<int:id>', endpoint = 'tarefa')
 api.add_resource(HealthcheckAPI, '/healthcheck', endpoint = 'healthcheck')
 
 if __name__ == '__main__':
