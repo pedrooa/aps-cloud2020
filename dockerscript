@@ -1,0 +1,5 @@
+docker rm -f $(docker ps -aq) 
+rm result.txt
+docker build -t pythonproject .
+docker run pythonproject > result.txt
+docker rm -f $(docker ps -aq) 
