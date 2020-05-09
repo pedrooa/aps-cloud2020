@@ -36,7 +36,7 @@ class TaskListAPI(Resource):
         pyproject = open("../docker/pyproject.py", "w")
         pyproject.write(args)
         pyproject.close()
-        subprocess.call(['./dockerscript'])
+        os.system("./dockerscript")
         file = "../docker/result.txt"
         with open(file, 'r') as result:
             result = result.read()
